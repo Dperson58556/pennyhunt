@@ -1,0 +1,42 @@
+<!doctype html>
+<!--
+  base.html: the shared page "frame".
+  Other templates extend this layout and define a content block.
+  Template expressions are rendered with double curly braces in the final page.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Penny Hunt</title>
+  <!-- url_for('static', ...) builds the path to files in the static/ folder -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="{{ url_for('home') }}">🪙 Penny Hunt</a>
+    <nav>
+      <a href="{{ url_for('home') }}">Store</a>
+      <a href="{{ url_for('open_page') }}">Open Roll{% if pending_count %} ({{ pending_count }}){% endif %}</a>
+      <a href="{{ url_for('album') }}">Album</a>
+      <a href="{{ url_for('jar') }}">Jar</a>
+      <a href="{{ url_for('grading_page') }}">PCGS</a>
+    </nav>
+    <!-- id="balance" lets open.js update the number without reloading -->
+    <div class="wallet">
+      <span id="balance">{{ state.balance_cents | money }}</span>
+      · {{ state.unopened_rolls }} rolls · Day {{ state.business_day }}
+    </div>
+  </header>
+
+  <main>
+    <!-- flash() messages from app.py show up here, coloured by category -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="flash {{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+date,mintmark,key,label,share
+1960,P,1960P-LD,Large Date,0.98
+1960,P,1960P-SD,Small Date,0.02
+1960,D,1960D-LD,Large Date,0.97
+1960,D,1960D-SD,Small Date,0.03
+1970,S,1970S-LD,Large Date (Low 7),0.95
+1970,S,1970S-SD,Small Date (High 7),0.05
+1982,P,1982P-CU-LD,Copper Large Date,0.30
+1982,P,1982P-CU-SD,Copper Small Date,0.20
+1982,P,1982P-ZN-LD,Zinc Large Date,0.25
+1982,P,1982P-ZN-SD,Zinc Small Date,0.25
+1982,D,1982D-CU-LD,Copper Large Date,0.45
+1982,D,1982D-ZN-LD,Zinc Large Date,0.30
+1982,D,1982D-ZN-SD,Zinc Small Date,0.25

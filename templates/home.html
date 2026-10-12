@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Bank Counter</h1>
+
+<section class="cards">
+  <!-- Each store item is a tiny HTML form that POSTs to /buy/<item> -->
+  <div class="card">
+    <h2>Roll</h2>
+    <p>{{ cfg.ROLL_SIZE }} pennies</p>
+    <form method="post" action="{{ url_for('buy', item='roll') }}">
+      <button>Buy for {{ cfg.ROLL_PRICE_CENTS | money }}</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Box</h2>
+    <p>{{ cfg.BOX_ROLLS }} rolls</p>
+    <form method="post" action="{{ url_for('buy', item='box') }}">
+      <button>Buy for {{ cfg.BOX_PRICE_CENTS | money }}</button>
+    </form>
+  </div>
+  <div class="card highlight">
+    <h2>Search</h2>
+    <p>{{ state.unopened_rolls }} unopened roll(s)</p>
+    <form method="post" action="{{ url_for('open_roll') }}">
+      <button {% if not state.unopened_rolls and not pending_count %}disabled{% endif %}>
+        {% if pending_count %}Continue current roll{% else %}Open a roll{% endif %}
+      </button>
+    </form>
+  </div>
+</section>
+
+<h2>Progress</h2>
+<!-- <progress> is a built-in HTML progress bar -->
+<div class="stat">Base set: {{ stats.base_have }} / {{ stats.base_total }}
+  <progress value="{{ stats.base_have }}" max="{{ stats.base_total }}"></progress></div>
+<div class="stat">Varieties: {{ stats.var_have }} / {{ stats.var_total }}
+  <progress value="{{ stats.var_have }}" max="{{ stats.var_total }}"></progress></div>
+<div class="stat">Specials: {{ stats.spec_have }} / {{ stats.spec_total }}
+  <progress value="{{ stats.spec_have }}" max="{{ stats.spec_total }}"></progress></div>
+
+<h2>Stats</h2>
+<ul class="stats">
+  <li>Rolls opened: {{ state.rolls_opened }}</li>
+  <li>Coins searched: {{ state.coins_searched }}</li>
+  <li>Coins returned to bank: {{ state.coins_returned }}</li>
+  <li>Coins in jar: {{ stats.jar }}</li>
+  <li>Spent on rolls: {{ state.total_spent_cents | money }}</li>
+  <li>Spent on grading: {{ state.grading_fees_cents | money }}</li>
+</ul>
+{% endblock %}

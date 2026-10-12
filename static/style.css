@@ -1,0 +1,92 @@
+/*
+ * style.css: all of the app's styling.
+ * A rule looks like:   selector { property: value; }
+ *   .name   = elements with class="name"
+ *   #name   = the element with id="name"
+ * Colours are hex codes (#rrggbb).  Copper = #b87333.
+ */
+
+/* ---------- page basics ---------- */
+:root {                     /* variables, used as var(--copper) below */
+  --copper: #b87333;
+  --dark: #2b1d14;
+  --paper: #f7f1e8;
+  --album: #1f3a2e;         /* the green of a coin folder */
+}
+body { margin: 0; font-family: system-ui, sans-serif; background: var(--paper); color: var(--dark); }
+main { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+h1, h2 { font-family: Georgia, serif; }
+small { color: #777; font-size: .7em; }
+.hint { color: #666; font-size: .9rem; }
+
+/* ---------- header ---------- */
+.topbar { display: flex; align-items: center; gap: 1.5rem; padding: .7rem 1.2rem;
+          background: var(--dark); color: #fff; flex-wrap: wrap; }
+.topbar a { color: #f3d2b0; text-decoration: none; }
+.topbar nav { display: flex; gap: 1rem; }
+.logo { font-weight: bold; font-size: 1.2rem; }
+.wallet { margin-left: auto; }   /* pushes wallet to the right edge */
+
+/* ---------- buttons & forms ---------- */
+button { background: var(--copper); color: #fff; border: 0; border-radius: 6px;
+         padding: .6rem 1.1rem; font-size: 1rem; cursor: pointer; }
+button:hover:not(:disabled) { filter: brightness(1.1); }
+button:disabled { opacity: .4; cursor: default; }
+button.small { padding: .3rem .7rem; font-size: .85rem; }
+button.keep { background: #2e7d32; }
+button.return { background: #8d6e63; }
+form.inline { display: inline; }
+
+/* ---------- flash messages ---------- */
+.flash { padding: .6rem 1rem; border-radius: 6px; margin-bottom: .6rem; }
+.flash.success { background: #dff0d8; }
+.flash.error { background: #f8d7da; }
+
+/* ---------- home ---------- */
+.cards { display: flex; gap: 1rem; flex-wrap: wrap; }
+.card { background: #fff; padding: 1rem 1.4rem; border-radius: 10px; box-shadow: 0 1px 4px #0002; }
+.card.highlight { border: 2px solid var(--copper); }
+.stat progress { width: 300px; vertical-align: middle; margin-left: .5rem; }
+
+/* ---------- flip page ---------- */
+.flip-area { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+/* "perspective" gives the 3D depth needed for the flip */
+.coin { width: 240px; height: 240px; perspective: 800px; }
+.coin .inner { position: relative; width: 100%; height: 100%;
+               transition: transform .5s; transform-style: preserve-3d; }
+.coin.flipped .inner { transform: rotateY(180deg); }   /* the flip */
+.face { position: absolute; inset: 0; border-radius: 50%; display: flex;
+        flex-direction: column; align-items: center; justify-content: center;
+        backface-visibility: hidden;                    /* hide the side facing away */
+        background: radial-gradient(circle at 35% 30%, #e6a170, var(--copper) 60%, #7a4a22);
+        color: #fff; box-shadow: inset 0 0 0 8px #0003, 0 4px 12px #0004; }
+.face.back { font-size: 5rem; }
+.face.front { transform: rotateY(180deg); text-align: center; padding: 1rem; }
+.coin.special .face.front { box-shadow: inset 0 0 0 8px gold, 0 0 25px gold; }
+.coin-title { font-size: 1.6rem; font-weight: bold; }
+.coin-grade { margin: .3rem 0; }
+.controls { display: flex; gap: .6rem; }
+.badge { display: inline-block; background: gold; color: #000; font-size: .7rem;
+         padding: .1rem .4rem; border-radius: 4px; margin: .1rem; font-weight: bold; }
+.log { columns: 3; font-size: .85rem; }
+.log .book { color: #2e7d32; font-weight: bold; }
+.log .returned { color: #999; }
+
+/* ---------- album ---------- */
+.album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+              gap: .6rem; background: var(--album); padding: 1rem; border-radius: 10px; }
+.hole { aspect-ratio: 1; border-radius: 50%; background: #10241b;
+        box-shadow: inset 0 3px 8px #000; color: #8aa; display: flex;
+        flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; font-size: .75rem; padding: .3rem; }
+.hole.filled { background: radial-gradient(circle at 35% 30%, #e6a170, var(--copper) 60%, #7a4a22);
+               color: #fff; box-shadow: 0 2px 4px #000; }
+.hole.key { outline: 2px solid gold; }
+.hole.semi-key { outline: 2px dashed gold; }
+.hole.special.filled { outline: 3px solid gold; }
+.hole-title { font-weight: bold; }
+.hole-note { text-transform: uppercase; font-size: .6rem; color: gold; }
+
+/* ---------- tables ---------- */
+table.list { border-collapse: collapse; width: 100%; background: #fff; }
+table.list td, table.list th { padding: .4rem .6rem; border-bottom: 1px solid #eee; text-align: left; }

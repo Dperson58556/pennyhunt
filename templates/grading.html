@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>PCGS Grading</h1>
+<p class="hint">The "~" grade is your own estimate. PCGS shows you the coin's real grade. Each roll you open counts as {{ cfg.BUSINESS_DAYS_PER_ROLL }} business day. Today is day {{ state.business_day }}.</p>
+
+<form method="post" action="{{ url_for('advance') }}" class="inline">
+  <input type="hidden" name="days" value="1"><button class="small">Wait 1 business day</button>
+</form>
+<form method="post" action="{{ url_for('advance') }}" class="inline">
+  <input type="hidden" name="days" value="5"><button class="small">Wait 5 days</button>
+</form>
+
+<h2>At PCGS</h2>
+{% if not in_progress %}<p>Nothing submitted.</p>{% endif %}
+<table class="list">
+  {% for c in in_progress %}
+  <tr><td>{{ c.title }}</td><td>{{ c.est_label }}</td><td>{{ c.tier }}</td><td>due day {{ c.due_day }}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Graded</h2>
+<table class="list">
+  {% for c in graded %}
+  <tr><td>{{ c.title }}</td><td>you guessed {{ c.est_label }}</td>
+      <td><strong>PCGS {{ c.official_label }}</strong></td><td>{% if c.in_book %}in book{% else %}jar{% endif %}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Ready to submit</h2>
+<table class="list">
+  {% for c in eligible %}
+  <tr>
+    <td>{{ c.title }} {% for b in c.badges %}<span class="badge">{{ b }}</span>{% endfor %}</td>
+    <td>{{ c.est_label }}</td>
+    <td>{% if c.in_book %}book{% else %}jar{% endif %}</td>
+    <td>
+      <form method="post" action="{{ url_for('submit_grade', coin_id=c.id) }}" class="inline">
+        <select name="tier">
+          {% for key, t in tiers.items() %}
+            <option value="{{ key }}">{{ t.name }} {{ t.fee_cents|money }} ({{ t.days }}d)</option>
+          {% endfor %}
+        </select>
+        <button class="small">Submit</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Album</h1>
+<!--
+  `slots` is a dict: catalog key -> the best coin you own for that hole.
+  `slots.get(key)` returns None for an empty hole, so we draw it empty.
+  Jinja's "namespace" lets us count inside a loop.
+-->
+
+{% for era, coins in base_sections %}
+  {% set ns = namespace(have=0) %}
+  {% for t in coins %}{% if slots.get(t.key) %}{% set ns.have = ns.have + 1 %}{% endif %}{% endfor %}
+  <h2>{{ era }} <small>{{ ns.have }} / {{ coins|length }}</small></h2>
+  <div class="album-grid">
+    {% for t in coins %}
+      {% set c = slots.get(t.key) %}
+      <div class="hole {% if c %}filled{% endif %} {% if t.rarity %}{{ t.rarity }}{% endif %}">
+        <div class="hole-title">{{ t.title }}</div>
+        {% if c %}
+          <div class="hole-grade">{{ c.official_label or c.est_label }}</div>
+        {% elif t.rarity %}
+          <div class="hole-note">{{ t.rarity }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+
+<h2>Varieties</h2>
+<p class="hint">These split a normal date by how many of each were made (e.g. 1982 copper vs zinc). A coin here also fills its base hole.</p>
+<div class="album-grid">
+  {% for v in varieties %}
+    {% set c = slots.get(v.key) %}
+    <div class="hole {% if c %}filled{% endif %}">
+      <div class="hole-title">{{ v.title }}</div>
+      {% if c %}<div class="hole-grade">{{ c.official_label or c.est_label }}</div>{% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+{% for category, items in special_sections %}
+  <h2>{{ category }}</h2>
+  <div class="album-grid">
+    {% for s in items %}
+      {% set c = slots.get(s.key) %}
+      <div class="hole special {% if c %}filled{% endif %}" title="{{ s.notes }}">
+        <div class="hole-title">{{ s.title }}</div>
+        {% if c %}<div class="hole-grade">{{ c.official_label or c.est_label }}</div>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+{% endblock %}

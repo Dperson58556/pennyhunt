@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Duplicate Jar</h1>
+<p class="hint">Coins you kept that aren't the best copy of their type. If a jar coin grades higher than the book copy, it moves into the book on its own.</p>
+
+{% if not coins %}<p>The jar is empty.</p>{% endif %}
+
+<table class="list">
+  <tr><th>Coin</th><th>Grade</th><th>PCGS</th></tr>
+  {% for c in coins %}
+  <tr>
+    <td>{{ c.title }} {% for b in c.badges %}<span class="badge">{{ b }}</span>{% endfor %}</td>
+    <td>{{ c.official_label or c.est_label }}</td>
+    <td>
+      {% if c.official_label %}Graded
+      {% elif c.tier %}At PCGS (due day {{ c.due_day }})
+      {% else %}
+        <!-- The same small grading form is used on the PCGS page -->
+        <form method="post" action="{{ url_for('submit_grade', coin_id=c.id) }}" class="inline">
+          <select name="tier">
+            {% for key, t in tiers.items() %}
+              <option value="{{ key }}">{{ t.name }} {{ t.fee_cents|money }} ({{ t.days }}d)</option>
+            {% endfor %}
+          </select>
+          <button class="small">Submit</button>
+        </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

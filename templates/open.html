@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Searching a Roll</h1>
+<!--
+  This page is mostly empty HTML "slots" with ids.  static/open.js fetches the
+  coins from /api/pending and fills these slots in, one coin at a time.
+-->
+<p id="progress"></p>
+
+<div class="flip-area">
+  <!-- The coin: .inner rotates 180° when the "flipped" class is added -->
+  <div id="coin" class="coin">
+    <div class="inner">
+      <div class="face back">?</div>
+      <div class="face front">
+        <div id="coin-title" class="coin-title"></div>
+        <div id="coin-grade" class="coin-grade"></div>
+        <div id="coin-badges"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btn-flip">Flip (Space)</button>
+    <button id="btn-keep" class="keep" disabled>Keep (K)</button>
+    <button id="btn-return" class="return" disabled>Return (R)</button>
+  </div>
+  <button id="btn-return-rest" class="small">Return all remaining coins</button>
+</div>
+
+<div id="done" hidden>
+  <h2>Roll finished!</h2>
+  <p id="summary"></p>
+  <form method="post" action="{{ url_for('open_roll') }}"><button>Open next roll</button></form>
+</div>
+
+<h3>This roll</h3>
+<ol id="log" class="log"></ol>
+
+<script src="{{ url_for('static', filename='open.js') }}"></script>
+{% endblock %}
